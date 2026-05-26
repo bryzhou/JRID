@@ -251,6 +251,10 @@ p {
   filter: brightness(0.92);
 }
 
+.site-nav button.nav-contact-button.is-active {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.36), 0 0 0 1px rgba(217, 161, 106, 0.28);
+}
+
 .site-nav button.nav-contact-button:hover::after,
 .site-nav button.nav-contact-button.is-active::after {
   opacity: 0;
@@ -926,8 +930,12 @@ p {
   }
 
   .site-nav button {
-    width: 100%;
+    width: fit-content;
     text-align: left;
+  }
+
+  .site-nav button.nav-contact-button {
+    width: fit-content;
   }
 
   .menu-toggle {
