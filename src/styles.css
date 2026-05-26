@@ -444,7 +444,6 @@ p {
   flex-direction: column;
   min-width: 0;
   min-height: 236px;
-  padding: 30px;
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -452,14 +451,8 @@ p {
   overflow: hidden;
 }
 
-.text-card::before,
-.location-card::before {
-  display: block;
-  width: 52px;
-  height: 3px;
-  margin-bottom: 34px;
-  content: "";
-  background: var(--copper-gradient);
+.location-card {
+  padding: 30px;
 }
 
 .text-card p,
@@ -467,6 +460,27 @@ p {
   margin-bottom: 0;
   overflow-wrap: break-word;
   word-break: normal;
+}
+
+.text-card__image {
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+  display: block;
+}
+
+.text-card__body {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-card__bar {
+  width: 100%;
+  height: 6px;
+  margin-bottom: 18px;
+  background: var(--copper-gradient);
+  border-radius: 3px;
 }
 
 .section--charcoal .text-card {
@@ -561,6 +575,77 @@ p {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 26px;
+}
+
+/* World map and dot styles */
+.world-map {
+  position: relative;
+  width: 100%;
+  height: clamp(260px, 36vw, 420px);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 28px;
+}
+
+.world-map .map-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.world-map .dot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--copper);
+  box-shadow: 0 0 0 rgba(155,101,48,0.4);
+  position: relative;
+  z-index: 2;
+}
+
+.world-map .dot-fill {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(155,101,48,0.18);
+  z-index: 1;
+  animation: pulse 2000ms infinite ease-in-out;
+}
+
+.world-map .map-tooltip {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -150%);
+  white-space: nowrap;
+  background: rgba(17,17,17,0.92);
+  color: var(--white);
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  display: none;
+  z-index: 3;
+}
+
+.world-map .map-dot:hover .map-tooltip,
+.world-map .map-dot:focus .map-tooltip {
+  display: block;
+}
+
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.9; }
+  70% { transform: translate(-50%, -50%) scale(1.8); opacity: 0.02; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
 }
 
 .image-card {

@@ -39,10 +39,10 @@ const images = {
 };
 
 const coreCapabilities = [
-  { title: 'Electromechanical Assembly', text: '' },
-  { title: 'Rigging and Relocations', text: '' },
-  { title: 'Industrial Maintenance Services', text: '' },
-  { title: 'Engineering and Industrial Design', text: '' },
+  { title: 'Electromechanical Assembly', text: '', image: images.assembly },
+  { title: 'Rigging and Relocations', text: '', image: images.rigging },
+  { title: 'Industrial Maintenance Services', text: '', image: images.maintenance },
+  { title: 'Engineering and Industrial Design', text: '', image: images.engineering },
 ];
 
 const whyChoose = [
@@ -55,42 +55,14 @@ const whyChoose = [
 ].map(([title, text]) => ({ title, text }));
 
 const detailedServices = [
-  {
-    title: 'Industrial Design & Engineering',
-    image: images.engineering,
-    text: 'Manufacturing-focused design, process layouts, equipment planning, and practical engineering guidance.',
-    tags: ['Process Solutions', 'Plant Layouts', 'System Planning'],
-  },
-  {
-    title: 'Electromechanical Assembly',
-    image: images.assembly,
-    text: 'Mechanical and electrical assembly support for production systems, machinery, and industrial equipment.',
-    tags: ['Assembly', 'Controls Support', 'Manufacturing Systems'],
-  },
-  {
-    title: 'Rigging & Relocations',
-    image: images.rigging,
-    text: 'Industrial equipment movement, plant relocation, installation support, and coordinated field execution.',
-    tags: ['Rigging', 'Installation', 'Relocation'],
-  },
-  {
-    title: 'Industrial Maintenance',
-    image: images.maintenance,
-    text: 'Maintenance programs and field support designed to improve uptime and long-term system reliability.',
-    tags: ['Uptime', 'Reliability', 'Field Support'],
-  },
-  {
-    title: 'Automation & Integration',
-    image: images.automation,
-    text: 'Automation and equipment integration support for safer, more repeatable manufacturing operations.',
-    tags: ['Automation', 'Integration', 'Commissioning'],
-  },
-  {
-    title: 'Metal Fabrication & Guarding',
-    image: images.fabrication,
-    text: 'Industrial fabrication, machine guarding, and plant modifications built around real operating needs.',
-    tags: ['Fabrication', 'Machine Guarding', 'Plant Support'],
-  },
+  { title: 'Predictive Maintenance', image: images.maintenance, text: '' },
+  { title: 'Industrial and Electrical Services', image: images.engineering, text: '' },
+  { title: 'Industrial Mechanical Services', image: images.assembly, text: '' },
+  { title: 'Industrial Metal Fabrication (in-Plant) and out', image: images.fabrication, text: '' },
+  { title: 'Full Industrial Assembly', image: images.plant, text: '' },
+  { title: 'Full mechanical/electrical integration (all mfg.)', image: images.automation, text: '' },
+  { title: 'Machine Guarding Fabrication (OSHA Complaint)', image: images.fabrication, text: '' },
+  { title: 'Industrial Rigging and Relocation services (Nationwide)', image: images.rigging, text: '' },
 ];
 
 const equipmentCards = [
@@ -159,15 +131,27 @@ const locations = [
   {
     title: 'United States',
     // Replace placeholder contact details when final office information is available.
-    address: 'Address to be updated',
-    phone: 'Phone to be updated',
-    email: 'Email to be updated',
+    company: 'JMD, LLC',
+    address: '1259 Route 113 PA, Suite 309\nPerkasie, PA 18944\nUSA',
+    phone: '+1 (267) 446-4833',
+    website: 'www.jridesign.com',
+    email: 'info@jridesign.com',
+    // approximate coordinates for Perkasie, PA
+    lat: 40.3576,
+    lon: -75.2868,
+    label: 'United States Headquarters',
   },
   {
     title: 'Mexico',
-    address: 'Address to be updated',
-    phone: 'Phone to be updated',
-    email: 'Email to be updated',
+    company: 'MSM, SA de CV',
+    address: '1230 #53 Calle\nSan Nicolás de los Garza, NL\nMexico',
+    phone: '+52 (334) 614-8312',
+    website: 'www.msmty.com.mx',
+    email: 'info@msmty.com',
+    // approximate coordinates for San Nicolás de los Garza (Monterrey area)
+    lat: 25.7266,
+    lon: -100.2833,
+    label: 'Mexico Office & Shop',
   },
   {
     title: 'Brazil',
@@ -176,6 +160,38 @@ const locations = [
     email: 'Email to be updated',
   },
 ];
+
+function WorldMap({ locations }) {
+  // simple equirectangular projection to map lon/lat to percentage positions
+  const project = (lat, lon) => {
+    const x = (lon + 180) / 360; // 0..1
+    const y = (90 - lat) / 180; // 0..1
+    return { left: `${x * 100}%`, top: `${y * 100}%` };
+  };
+
+  // minimal public-domain SVG map used as background
+  const mapUrl = 'https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg';
+
+  return (
+    <div className="world-map" role="img" aria-label="World map with office locations" style={{ backgroundImage: `url('${mapUrl}')` }}>
+      {locations.map((loc) => (
+        loc.lat && loc.lon ? (
+          <button
+            key={loc.title}
+            className="map-dot"
+            style={project(loc.lat, loc.lon)}
+            aria-label={loc.label || loc.title}
+            type="button"
+          >
+            <span className="dot" />
+            <span className="dot-fill" />
+            <span className="map-tooltip">{loc.label || loc.title}</span>
+          </button>
+        ) : null
+      ))}
+    </div>
+  );
+}
 
 const serviceAreas = [
   'United States',
@@ -291,11 +307,15 @@ function CTASection({ setActivePage, title, text, primaryPage = 'Contact', secon
   );
 }
 
-function TextCard({ title, text }) {
+function TextCard({ title, text, image }) {
   return (
     <article className="text-card">
-      <h3>{title}</h3>
-      {text ? <p>{text}</p> : null}
+      {image && <img className="text-card__image" src={image} alt="" loading="lazy" />}
+      <div className="text-card__body">
+        <div className="text-card__bar" />
+        <h3>{title}</h3>
+        {text ? <p>{text}</p> : null}
+      </div>
     </article>
   );
 }
@@ -306,7 +326,7 @@ function ImageCard({ title, text, image, tags = [] }) {
       <img src={image} alt="" loading="lazy" />
       <div className="image-card__body">
         <h3>{title}</h3>
-        <p>{text}</p>
+        {text ? <p>{text}</p> : null}
         {tags.length > 0 && (
           <div className="tag-list">
             {tags.map((tag) => (
@@ -728,15 +748,35 @@ function ContactPage() {
         <div className="section-inner">
           <SectionHeader eyebrow="Locations" title="Office and operational presence." />
           <div className="card-grid card-grid--three">
-            {locations.map((location) => (
-              <article className="location-card" key={location.title}>
-                <h3>{location.title}</h3>
-                <p>{location.address}</p>
-                <p>{location.phone}</p>
-                <p>{location.email}</p>
-              </article>
-            ))}
+            {locations.map((location) => {
+              const tel = location.phone ? location.phone.replace(/[^+0-9]/g, '') : null;
+              const hrefWebsite = location.website
+                ? location.website.startsWith('http')
+                  ? location.website
+                  : `https://${location.website}`
+                : null;
+              return (
+                <article className="location-card" key={location.title}>
+                  <h3>{location.title}</h3>
+                  {location.company && <p className="location-company">{location.company}</p>}
+                  {location.address && (
+                    <p className="location-address" style={{ whiteSpace: 'pre-line' }}>{location.address}</p>
+                  )}
+                  {location.phone && tel && (
+                    <p><a href={`tel:${tel}`}>{location.phone}</a></p>
+                  )}
+                  {hrefWebsite && (
+                    <p><a href={hrefWebsite} target="_blank" rel="noopener noreferrer">{location.website}</a></p>
+                  )}
+                  {location.email && (
+                    <p><a href={`mailto:${location.email}`}>{location.email}</a></p>
+                  )}
+                </article>
+              );
+            })}
           </div>
+            {/* world map showing office locations */}
+            <WorldMap locations={locations} />
         </div>
       </section>
 
