@@ -382,13 +382,42 @@ function HomePage({ setActivePage }) {
         <div className="section-inner reliability-panel">
           <div>
             <p className="eyebrow">Safety & Reliability</p>
-            <h2>Serious industrial work requires safe execution and dependable systems.</h2>
+            <h2>Safety is a core priority in every project.</h2>
           </div>
-          <p>
-            JRID approaches projects with careful planning, field-tested processes, and practical
-            attention to long-term performance. From equipment movement to system commissioning,
-            the priority is safe, reliable execution that supports production goals.
-          </p>
+          <div className="safety-copy">
+            <p>
+              JRID integrates comprehensive risk assessments into all modifications, whether
+              directly or indirectly impacting operations, to ensure full compliance with applicable
+              safety standards and regulations.
+            </p>
+            <p>
+              All designs are developed in accordance with OSHA standards, including 29 CFR 1910
+              and 1926. From machine guarding to walkways, platforms, and structural modifications,
+              every detail is executed with strict adherence to regulatory requirements. The safety
+              and well-being of both JRID personnel and our clients are never compromised.
+            </p>
+          </div>
+          <div className="safety-philosophy">
+            <h3>Our Safety Philosophy</h3>
+            <p>
+              At JRID, safety is more than a requirement. It is a responsibility carried by every
+              individual.
+            </p>
+            <p>
+              A true professional is not defined by reacting to emergencies, but by consistently
+              working safely, following established procedures, applying training, and making
+              sound decisions every day.
+            </p>
+            <p>
+              This mindset protects not only the individual, but everyone in the workplace. By
+              taking ownership of our actions and maintaining discipline in execution, we create
+              safer, more reliable operations across every project.
+            </p>
+            <p className="safety-signature">
+              <strong>Jose A. Robledo</strong>
+              <span>President &amp; CEO</span>
+            </p>
+          </div>
         </div>
       </section>
 
