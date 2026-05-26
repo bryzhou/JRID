@@ -136,10 +136,6 @@ const locations = [
     phone: '+1 (267) 446-4833',
     website: 'www.jridesign.com',
     email: 'info@jridesign.com',
-    // approximate coordinates for Perkasie, PA
-    lat: 40.3576,
-    lon: -75.2868,
-    label: 'United States Headquarters',
   },
   {
     title: 'Mexico',
@@ -148,10 +144,6 @@ const locations = [
     phone: '+52 (334) 614-8312',
     website: 'www.msmty.com.mx',
     email: 'info@msmty.com',
-    // approximate coordinates for San Nicolás de los Garza (Monterrey area)
-    lat: 25.7266,
-    lon: -100.2833,
-    label: 'Mexico Office & Shop',
   },
   {
     title: 'Brazil',
@@ -160,38 +152,6 @@ const locations = [
     email: 'Email to be updated',
   },
 ];
-
-function WorldMap({ locations }) {
-  // simple equirectangular projection to map lon/lat to percentage positions
-  const project = (lat, lon) => {
-    const x = (lon + 180) / 360; // 0..1
-    const y = (90 - lat) / 180; // 0..1
-    return { left: `${x * 100}%`, top: `${y * 100}%` };
-  };
-
-  // minimal public-domain SVG map used as background
-  const mapUrl = 'https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg';
-
-  return (
-    <div className="world-map" role="img" aria-label="World map with office locations" style={{ backgroundImage: `url('${mapUrl}')` }}>
-      {locations.map((loc) => (
-        loc.lat && loc.lon ? (
-          <button
-            key={loc.title}
-            className="map-dot"
-            style={project(loc.lat, loc.lon)}
-            aria-label={loc.label || loc.title}
-            type="button"
-          >
-            <span className="dot" />
-            <span className="dot-fill" />
-            <span className="map-tooltip">{loc.label || loc.title}</span>
-          </button>
-        ) : null
-      ))}
-    </div>
-  );
-}
 
 const serviceAreas = [
   'United States',
@@ -373,7 +333,7 @@ function HomePage({ setActivePage }) {
         }
       />
 
-      <section className="section">
+      <section className="section section--diagonal">
         <div className="section-inner">
           <SectionHeader
             eyebrow="Core Services"
@@ -407,7 +367,7 @@ function HomePage({ setActivePage }) {
         </div>
       </section>
 
-      <section className="section section--charcoal">
+      <section className="section section--charcoal section--diagonal">
         <div className="section-inner">
           <SectionHeader
             eyebrow="Why Choose JRID"
@@ -434,7 +394,7 @@ function HomePage({ setActivePage }) {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section section--diagonal">
         <div className="section-inner split-layout">
           <div>
             <p className="eyebrow eyebrow--dark">Our Mission</p>
@@ -490,7 +450,7 @@ function AboutPage({ setActivePage }) {
         </div>
       </section>
 
-      <section className="section section--muted">
+      <section className="section section--muted section--diagonal">
         <div className="section-inner">
           <SectionHeader
             eyebrow="Industrial Background"
@@ -539,7 +499,7 @@ function ServicesPage({ setActivePage }) {
         </div>
       </section>
 
-      <section className="section section--muted">
+      <section className="section section--muted section--diagonal">
         <div className="section-inner">
           <SectionHeader
             eyebrow="Detailed Services"
@@ -551,7 +511,7 @@ function ServicesPage({ setActivePage }) {
         </div>
       </section>
 
-      <section className="section process-section">
+      <section className="section process-section section--diagonal">
         <div className="section-inner">
           <SectionHeader
             eyebrow="Approach"
@@ -585,7 +545,7 @@ function EquipmentPage({ setActivePage }) {
         image={images.equipmentHero}
       />
 
-      <section className="section">
+      <section className="section section--diagonal">
         <div className="section-inner split-layout">
           <SectionHeader
             eyebrow="Equipment Overview"
@@ -600,7 +560,7 @@ function EquipmentPage({ setActivePage }) {
         </div>
       </section>
 
-      <section className="section section--muted">
+      <section className="section section--muted section--diagonal">
         <div className="section-inner">
           <div className="image-card-grid">
             {equipmentCards.map((item) => <ImageCard key={item.title} {...item} />)}
@@ -640,7 +600,7 @@ function ProjectGalleryPage({ setActivePage }) {
         image={images.galleryHero}
       />
 
-      <section className="section">
+      <section className="section section--diagonal">
         <div className="section-inner">
           <SectionHeader
             eyebrow="Gallery"
@@ -744,7 +704,7 @@ function ContactPage() {
         </div>
       </section>
 
-      <section className="section section--muted">
+      <section className="section section--muted section--diagonal">
         <div className="section-inner">
           <SectionHeader eyebrow="Locations" title="Office and operational presence." />
           <div className="card-grid card-grid--three">
@@ -775,8 +735,6 @@ function ContactPage() {
               );
             })}
           </div>
-            {/* world map showing office locations */}
-            <WorldMap locations={locations} />
         </div>
       </section>
 
