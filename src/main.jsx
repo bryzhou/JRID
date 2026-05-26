@@ -159,8 +159,6 @@ const serviceAreas = [
   'Brazil',
   'Spain',
   'Italy',
-  'Latin America',
-  'International manufacturing operations',
 ];
 
 function Logo({ variant = 'white' }) {
@@ -511,7 +509,7 @@ function ServicesPage({ setActivePage }) {
         </div>
       </section>
 
-      <section className="section process-section section--diagonal">
+      <section className="section process-section">
         <div className="section-inner">
           <SectionHeader
             eyebrow="Approach"
@@ -560,7 +558,7 @@ function EquipmentPage({ setActivePage }) {
         </div>
       </section>
 
-      <section className="section section--muted section--diagonal">
+      <section className="section section--muted">
         <div className="section-inner">
           <div className="image-card-grid">
             {equipmentCards.map((item) => <ImageCard key={item.title} {...item} />)}
@@ -600,7 +598,7 @@ function ProjectGalleryPage({ setActivePage }) {
         image={images.galleryHero}
       />
 
-      <section className="section section--diagonal">
+      <section className="section">
         <div className="section-inner">
           <SectionHeader
             eyebrow="Gallery"
