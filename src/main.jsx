@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+import logoWhite from './assets/Ativo 1@2x.png';
+import logoBlack from './assets/Ativo 4@2x.png';
 
 const navItems = ['Home', 'Services', 'Equipment', 'About', 'Project Gallery', 'Contact'];
 
@@ -37,22 +39,10 @@ const images = {
 };
 
 const coreCapabilities = [
-  {
-    title: 'Industrial Design & Engineering',
-    text: 'Practical design, layout, process, and engineering support for manufacturing environments.',
-  },
-  {
-    title: 'Manufacturing Systems',
-    text: 'Integrated production systems, equipment planning, and process solutions built for uptime.',
-  },
-  {
-    title: 'Turnkey Project Support',
-    text: 'Project guidance from planning and procurement through installation, commissioning, and completion.',
-  },
-  {
-    title: 'Equipment Integration',
-    text: 'Mechanical, electrical, automation, and plant equipment integration for operating facilities.',
-  },
+  { title: 'Electromechanical Assembly', text: '' },
+  { title: 'Rigging and Relocations', text: '' },
+  { title: 'Industrial Maintenance Services', text: '' },
+  { title: 'Engineering and Industrial Design', text: '' },
 ];
 
 const whyChoose = [
@@ -172,24 +162,18 @@ const locations = [
     address: 'Address to be updated',
     phone: 'Phone to be updated',
     email: 'Email to be updated',
-    mapPosition: { left: '32%', top: '40%' },
-    type: 'headquarters',
   },
   {
     title: 'Mexico',
     address: 'Address to be updated',
     phone: 'Phone to be updated',
     email: 'Email to be updated',
-    mapPosition: { left: '28%', top: '50%' },
-    type: 'office',
   },
   {
     title: 'Brazil',
     address: 'Address to be updated',
     phone: 'Phone to be updated',
     email: 'Email to be updated',
-    mapPosition: { left: '38%', top: '62%' },
-    type: 'office',
   },
 ];
 
@@ -203,11 +187,11 @@ const serviceAreas = [
   'International manufacturing operations',
 ];
 
-function Logo() {
+function Logo({ variant = 'white' }) {
+  const src = variant === 'black' ? logoBlack : logoWhite;
   return (
-    <div className="logo" aria-label="JRID Industrial Services">
-      <strong>JRID</strong>
-      <span>Industrial Design & Engineering</span>
+    <div className="logo">
+      <img className="logo-image" src={src} alt="JRID" />
     </div>
   );
 }
@@ -265,7 +249,11 @@ function HeroSection({ eyebrow, title, text, image, actions }) {
     <section className="hero-section" style={{ '--hero-image': `url("${image}")` }}>
       <div className="hero-section__content">
         {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-        <h1>{title}</h1>
+        {typeof title === 'string' || typeof title === 'number' ? (
+          <h1>{title}</h1>
+        ) : (
+          <div className="hero-logo">{title}</div>
+        )}
         <p>{text}</p>
         {actions && <div className="button-row">{actions}</div>}
       </div>
@@ -283,9 +271,9 @@ function SectionHeader({ eyebrow, title, text, align = 'left' }) {
   );
 }
 
-function CTASection({ setActivePage, title, text, primaryPage = 'Contact', secondaryPage = 'Services', variant = 'dark' }) {
+function CTASection({ setActivePage, title, text, primaryPage = 'Contact', secondaryPage = 'Services' }) {
   return (
-    <section className={`section cta-section ${variant === 'light' ? 'cta-section--light' : ''}`}>
+    <section className="section cta-section">
       <div className="section-inner cta-panel">
         <div>
           <p className="eyebrow">Start a Project</p>
@@ -307,7 +295,7 @@ function TextCard({ title, text }) {
   return (
     <article className="text-card">
       <h3>{title}</h3>
-      <p>{text}</p>
+      {text ? <p>{text}</p> : null}
     </article>
   );
 }
@@ -354,7 +342,7 @@ function HomePage({ setActivePage }) {
     <main>
       <HeroSection
         eyebrow="Industrial Design / Engineering / Manufacturing Systems"
-        title="JRID"
+        title={<Logo variant="white" />}
         text="Industrial design, engineering, manufacturing systems, and turnkey project support for operations that need dependable execution from planning through commissioning."
         image={images.homeHero}
         actions={
@@ -430,13 +418,11 @@ function HomePage({ setActivePage }) {
         <div className="section-inner split-layout">
           <div>
             <p className="eyebrow eyebrow--dark">Our Mission</p>
-            <h2>Helping manufacturers build smarter, safer, and more efficient operations.</h2>
+            <h2>JRID delivers a true competitive advantage through safe, efficient, and reliable execution.</h2>
           </div>
           <div className="rich-text">
             <p>
-              JRID exists to help industrial teams improve manufacturing performance through
-              practical design, dependable equipment integration, and turnkey project support that
-              moves from concept to completion with clarity.
+              We prioritize safety at every level while meeting project timelines and reducing unnecessary costs. Our focus is simple: prompt delivery that enhances productivity—without compromising quality.
             </p>
             <Button page="About" setActivePage={setActivePage}>Learn More</Button>
           </div>
@@ -458,7 +444,7 @@ function AboutPage({ setActivePage }) {
       <HeroSection
         eyebrow="About"
         title="About JRID"
-        text="Industrial design, engineering, and turnkey project support for manufacturing operations in the United States and internationally."
+        text="JRID provides industrial design, engineering, and turnkey project support for manufacturing operations in the United States and internationally."
         image={images.aboutHero}
       />
       <section className="section">
@@ -466,73 +452,36 @@ function AboutPage({ setActivePage }) {
           <SectionHeader eyebrow="Company Overview" title="Built around dependable industrial execution." />
           <div className="rich-text">
             <p>
-              JRID provides industrial design, engineering, and turnkey project support for
-              manufacturing operations in the United States and internationally. Founded in 2026,
-              JRID is based in the United States with offices and operational presence in Mexico and
-              Brazil.
+              JRID provides industrial design, engineering, and turnkey project support for manufacturing operations in the United States and internationally.
             </p>
             <p>
-              The company supports manufacturers that need dependable industrial systems, efficient
-              manufacturing processes, and experienced guidance from planning through commissioning.
+              Founded in 2022, JRID operates with headquarters and offices in the United States, Mexico, and Brazil, supporting companies that need dependable industrial systems, efficient manufacturing processes, and experienced guidance. The company works across industries and regions, helping manufacturers transform complex operational needs into practical, well-built solutions.
             </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section section--pale">
-        <div className="section-inner">
-          <SectionHeader
-            eyebrow="Industrial Background"
-            title="Practical industrial experience across regions."
-            text="JRID brings hands-on manufacturing design, assembly, and commissioning support for U.S. and international operations."
-          />
-          <div className="stat-grid">
-            <TextCard title="Established in 2026" text="Supporting manufacturers with practical project expertise." />
-            <TextCard title="U.S., Mexico & Brazil" text="Based in the United States with offices and operational presence in Mexico and Brazil." />
-            <TextCard title="30+ Years of Experience" text="Driven by founder Jose Robledo's background in manufacturing systems." />
-            <TextCard title="International Exposure" text="Projects in Spain, Italy, the United States, Mexico, and Brazil." />
+            <p>
+              JRID is grounded in more than thirty years of hands-on industrial experience. Founder Jose Robledo has designed, assembled, and commissioned manufacturing systems and full-scale facilities across the United States, Mexico, Brazil, Spain, and Italy. His background spans plant development, process engineering, equipment integration, and real-world manufacturing execution.
+            </p>
+            <p>
+              This foundation gives JRID a clear advantage: the company understands not only how industrial systems are designed, but how they are built, operated, and improved in the field.
+            </p>
+            <p>
+              Today, JRID combines technical expertise, global project experience, and practical execution to help manufacturers create reliable systems built for long-term performance.
+            </p>
           </div>
         </div>
       </section>
 
       <section className="section section--muted">
-        <div className="section-inner split-layout">
-          <div>
-            <p className="eyebrow eyebrow--dark">What JRID Does</p>
-            <h2>Planning, engineering, assembly, integration, and commissioning support.</h2>
-          </div>
-          <div className="rich-text">
-            <p>
-              JRID helps industrial clients evaluate project needs, develop practical approaches,
-              coordinate equipment and systems, and support the field execution required to bring
-              manufacturing operations online.
-            </p>
-            <p>
-              Jose Robledo's experience includes designing, assembling, and commissioning
-              manufacturing systems and full-scale facilities across multiple countries. That
-              background informs JRID's direct, practical approach to industrial work.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section section--pale">
-        <div className="section-inner split-layout">
-          <div>
-            <SectionHeader
-              eyebrow="Mission & Values"
-              title="Practical solutions and reliable execution."
-            />
-          </div>
-          <div className="rich-text">
-            <p>
-              JRID helps manufacturers build safer, more efficient operations with clear planning,
-              dependable systems, and experienced project support.
-            </p>
-            <p>
-              The focus is on execution, reliability, and long-term performance—not just industrial
-              engineering in theory.
-            </p>
+        <div className="section-inner">
+          <SectionHeader
+            eyebrow="Industrial Background"
+            title="Experience across facilities, systems, and regions."
+            text="JRID is grounded in more than thirty years of hands-on industrial experience through founder Jose Robledo."
+          />
+          <div className="stat-grid">
+            <TextCard title="Established in 2026" text="Created to support manufacturers with practical industrial project expertise." />
+            <TextCard title="U.S., Mexico & Brazil" text="Based in the United States with offices and operational presence in Mexico and Brazil." />
+            <TextCard title="30+ Years of Experience" text="Backed by founder Jose Robledo's design, assembly, and commissioning background." />
+            <TextCard title="International Exposure" text="Project experience includes Spain, Italy, the United States, Mexico, and Brazil." />
           </div>
         </div>
       </section>
@@ -540,7 +489,7 @@ function AboutPage({ setActivePage }) {
       <CTASection
         setActivePage={setActivePage}
         title="Work with an industrial partner built for execution."
-        text="Reach out to discuss your manufacturing systems, equipment, services, or project needs."
+        text="Contact JRID to discuss manufacturing systems, equipment, services, or project support."
         secondaryPage="Services"
       />
     </main>
@@ -713,37 +662,6 @@ function ProjectGalleryPage({ setActivePage }) {
   );
 }
 
-function WorldMap({ locations, hoveredLocation, onLocationHover }) {
-  return (
-    <div className="world-map" aria-label="Operational presence world map">
-      <svg viewBox="0 0 1000 520" className="world-map__graphic" aria-hidden="true">
-        <path d="M130 170c35-45 82-50 129-40 32 7 65 22 84 48 16 19 26 48 24 74-2 34-18 62-45 81-27 18-60 18-90 16-34-3-69-13-97-33-23-16-40-40-49-67-5-16-8-33-2-50z" fill="rgba(17,17,17,0.12)" />
-        <path d="M340 138c38-10 70-8 108 7 24 10 43 28 56 50 14 26 19 58 13 87-5 21-17 39-36 53-18 13-40 18-62 20-26 2-52-1-76-12-24-10-44-26-56-47-15-28-16-61-5-91 9-23 24-42 54-57z" fill="rgba(17,17,17,0.12)" />
-        <path d="M520 128c42 5 79 24 106 53 22 25 31 61 25 93-7 38-31 69-64 85-22 11-48 13-72 9-24-3-46-12-64-27-21-18-35-42-40-68-6-27 0-56 16-79 16-25 41-44 78-56z" fill="rgba(17,17,17,0.12)" />
-        <path d="M690 210c28 10 52 30 66 57 8 15 10 33 6 50-4 19-16 34-33 44-17 10-37 13-56 11-18-2-35-9-50-20-20-16-34-38-37-62-4-27 4-55 21-76 15-18 38-29 64-34z" fill="rgba(17,17,17,0.12)" />
-        <path d="M780 300c18-12 40-16 60-10 10 4 21 10 28 19 8 10 11 23 9 35-2 13-9 25-19 35-11 10-24 16-38 18-13 2-26-1-37-8-12-7-20-18-24-31-4-16-2-33 8-46 6-8 14-14 22-18z" fill="rgba(17,17,17,0.12)" />
-        <path d="M555 390c18-8 40-7 58 4 10 6 18 15 23 26 6 14 6 30 1 44-5 13-16 24-30 30-14 6-30 7-44 2-16-6-29-19-36-34-8-17-8-36 0-54 5-11 14-20 28-24z" fill="rgba(17,17,17,0.12)" />
-        <path d="M850 382c20-4 38 2 56 12 10 6 18 14 23 24 5 10 6 21 3 32-4 14-14 26-27 33-14 9-30 10-44 4-14-6-25-18-31-32-6-15-6-32 1-47 4-10 11-19 19-24z" fill="rgba(17,17,17,0.12)" />
-      </svg>
-      {locations.map((location) => (
-        <button
-          key={location.title}
-          type="button"
-          className={`world-map__dot ${hoveredLocation === location.title ? 'is-hovered' : ''}`}
-          style={location.mapPosition}
-          onMouseEnter={() => onLocationHover(location.title)}
-          onMouseLeave={() => onLocationHover(null)}
-          onFocus={() => onLocationHover(location.title)}
-          onBlur={() => onLocationHover(null)}
-          aria-label={`${location.type === 'headquarters' ? 'Headquarters' : 'Office'} in ${location.title}`}
-        >
-          <span className="world-map__label">{location.type === 'headquarters' ? 'Headquarters' : 'Office'}</span>
-        </button>
-      ))}
-    </div>
-  );
-}
-
 function ContactPage() {
   const [form, setForm] = useState({
     name: '',
@@ -754,7 +672,6 @@ function ContactPage() {
     projectType: '',
     message: '',
   });
-  const [hoveredLocation, setHoveredLocation] = useState(null);
 
   const updateField = (event) => {
     const { name, value } = event.target;
@@ -808,26 +725,17 @@ function ContactPage() {
       </section>
 
       <section className="section section--muted">
-        <div className="section-inner location-section">
-          <div>
-            <SectionHeader eyebrow="Locations" title="Office and operational presence." />
-            <div className="card-grid card-grid--three">
-              {locations.map((location) => (
-                <article className="location-card" key={location.title}>
-                  <h3>{location.title}</h3>
-                  <p>{location.address}</p>
-                  <p>{location.phone}</p>
-                  <p>{location.email}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-          <div className="world-map-panel">
-            <WorldMap
-              locations={locations}
-              hoveredLocation={hoveredLocation}
-              onLocationHover={setHoveredLocation}
-            />
+        <div className="section-inner">
+          <SectionHeader eyebrow="Locations" title="Office and operational presence." />
+          <div className="card-grid card-grid--three">
+            {locations.map((location) => (
+              <article className="location-card" key={location.title}>
+                <h3>{location.title}</h3>
+                <p>{location.address}</p>
+                <p>{location.phone}</p>
+                <p>{location.email}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
