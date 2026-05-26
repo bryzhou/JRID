@@ -414,7 +414,7 @@ function HomePage({ setActivePage }) {
               safer, more reliable operations across every project.
             </p>
             <p className="safety-signature">
-              <strong>Jose A. Robledo</strong>
+              <strong>Jose M. Robledo</strong>
               <span>President &amp; CEO</span>
             </p>
           </div>
@@ -485,7 +485,7 @@ function AboutPage({ setActivePage }) {
             text="JRID is grounded in more than thirty years of hands-on industrial experience through founder Jose Robledo."
           />
           <div className="stat-grid">
-            <TextCard title="Established in 2026" text="Created to support manufacturers with practical industrial project expertise." />
+            <TextCard title="Established in 2022" text="Created to support manufacturers with practical industrial project expertise." />
             <TextCard title="U.S., Mexico & Brazil" text="Based in the United States with offices and operational presence in Mexico and Brazil." />
             <TextCard title="30+ Years of Experience" text="Backed by founder Jose Robledo's design, assembly, and commissioning background." />
             <TextCard title="International Exposure" text="Project experience includes Spain, Italy, the United States, Mexico, and Brazil." />
@@ -801,6 +801,35 @@ function App() {
 
   useEffect(() => {
     document.title = activePage === 'Home' ? 'JRID Industrial Services' : `${activePage} | JRID`;
+  }, [activePage]);
+
+  useEffect(() => {
+    const cards = document.querySelectorAll(
+      '.text-card, .image-card, .location-card, .process-list li, .area-list li',
+    );
+
+    if (!('IntersectionObserver' in window)) {
+      cards.forEach((card) => card.classList.add('is-visible'));
+      return undefined;
+    }
+
+    cards.forEach((card) => card.classList.add('reveal-card'));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.16, rootMargin: '0px 0px -40px' },
+    );
+
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
   }, [activePage]);
 
   return (

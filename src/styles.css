@@ -507,6 +507,26 @@ p {
   border-radius: 3px;
 }
 
+.reveal-card {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 520ms ease,
+    transform 520ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+  will-change: opacity, transform;
+}
+
+.reveal-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.image-card.reveal-card.is-visible:hover {
+  transform: translateY(-3px);
+}
+
 .section--charcoal .text-card {
   background: rgba(255, 255, 255, 0.045);
   border-color: var(--line-dark);
@@ -886,20 +906,26 @@ p {
 }
 
 .cta-section {
-  padding-top: clamp(68px, 8vw, 104px);
-  padding-bottom: clamp(68px, 8vw, 104px);
+  padding-top: clamp(46px, 6vw, 72px);
+  padding-bottom: clamp(46px, 6vw, 72px);
 }
 
 .cta-panel {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) auto;
   gap: 34px;
-  align-items: end;
+  align-items: center;
+}
+
+.cta-panel h2 {
+  max-width: 760px;
+  font-size: clamp(30px, 3.4vw, 46px);
+  line-height: 1.03;
 }
 
 .cta-panel p:last-child {
-  max-width: 700px;
-  margin-top: 22px;
+  max-width: 660px;
+  margin-top: 16px;
   margin-bottom: 0;
 }
 
@@ -1016,9 +1042,6 @@ p {
     justify-content: flex-start;
   }
 
-  .cta-panel {
-    align-items: start;
-  }
 }
 
 @media (max-width: 640px) {
@@ -1077,5 +1100,15 @@ p {
   .text-card::before,
   .location-card::before {
     margin-bottom: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-card,
+  .reveal-card.is-visible,
+  .image-card.reveal-card.is-visible:hover {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
