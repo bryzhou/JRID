@@ -172,6 +172,12 @@ function Logo({ variant = 'white' }) {
 
 function Header({ activePage, setActivePage }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [siteRegion, setSiteRegion] = useState('US');
+  const regionLabels = {
+    US: 'United States',
+    MX: 'Mexico',
+    BR: 'Brazil',
+  };
 
   const navigate = (page) => {
     setActivePage(page);
@@ -197,15 +203,29 @@ function Header({ activePage, setActivePage }) {
         ))}
       </nav>
 
-      <button
-        className="menu-toggle"
-        onClick={() => setMenuOpen((open) => !open)}
-        aria-label="Toggle navigation"
-        aria-expanded={menuOpen}
-      >
-        <span />
-        <span />
-      </button>
+      <div className="header-actions">
+        <label className="region-selector">
+          <select
+            aria-label={`Select site region. Current selection: ${regionLabels[siteRegion]}`}
+            value={siteRegion}
+            onChange={(event) => setSiteRegion(event.target.value)}
+          >
+            <option value="US">🇺🇸</option>
+            <option value="MX">🇲🇽</option>
+            <option value="BR">🇧🇷</option>
+          </select>
+        </label>
+
+        <button
+          className="menu-toggle"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-label="Toggle navigation"
+          aria-expanded={menuOpen}
+        >
+          <span />
+          <span />
+        </button>
+      </div>
     </header>
   );
 }
