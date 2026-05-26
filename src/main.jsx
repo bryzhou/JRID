@@ -1,0 +1,887 @@
+import React, { useEffect, useMemo, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import './styles.css';
+
+const navItems = ['Home', 'Services', 'Equipment', 'About', 'Project Gallery', 'Contact'];
+
+const images = {
+  // Replace these placeholder image URLs with final files such as /images/hero-industrial.jpg.
+  homeHero:
+    'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&fm=jpg&q=78&w=2400',
+  aboutHero:
+    'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&fm=jpg&q=78&w=2400',
+  servicesHero:
+    'https://images.unsplash.com/photo-1581092335397-9583eb92d232?auto=format&fit=crop&fm=jpg&q=78&w=2400',
+  equipmentHero:
+    'https://images.unsplash.com/photo-1565043666747-69f6646db940?auto=format&fit=crop&fm=jpg&q=78&w=2400',
+  galleryHero:
+    'https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&fm=jpg&q=78&w=2400',
+  contactHero:
+    'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&fm=jpg&q=78&w=2400',
+  engineering:
+    'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&fm=jpg&q=72&w=1200',
+  assembly:
+    'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&fm=jpg&q=72&w=1200',
+  rigging:
+    'https://images.unsplash.com/photo-1581093458791-9d15482442f6?auto=format&fit=crop&fm=jpg&q=72&w=1200',
+  maintenance:
+    'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&fm=jpg&q=72&w=1200',
+  automation:
+    'https://images.unsplash.com/photo-1516937941344-00b4e0337589?auto=format&fit=crop&fm=jpg&q=72&w=1200',
+  fabrication:
+    'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&fm=jpg&q=72&w=1200',
+  equipment:
+    'https://images.unsplash.com/photo-1581092919535-7146ff1a590b?auto=format&fit=crop&fm=jpg&q=72&w=1200',
+  plant:
+    'https://images.unsplash.com/photo-1581091215367-59ab6e4763b4?auto=format&fit=crop&fm=jpg&q=72&w=1200',
+};
+
+const coreCapabilities = [
+  {
+    title: 'Industrial Design & Engineering',
+    text: 'Practical design, layout, process, and engineering support for manufacturing environments.',
+  },
+  {
+    title: 'Manufacturing Systems',
+    text: 'Integrated production systems, equipment planning, and process solutions built for uptime.',
+  },
+  {
+    title: 'Turnkey Project Support',
+    text: 'Project guidance from planning and procurement through installation, commissioning, and completion.',
+  },
+  {
+    title: 'Equipment Integration',
+    text: 'Mechanical, electrical, automation, and plant equipment integration for operating facilities.',
+  },
+];
+
+const whyChoose = [
+  ['30+ Years of Industrial Experience', 'Hands-on credibility through founder Jose Robledo and international manufacturing work.'],
+  ['International Project Experience', 'Project exposure across Spain, Italy, the United States, Mexico, Brazil, and broader markets.'],
+  ['Turnkey Project Support', 'Disciplined coordination across design, assembly, integration, commissioning, and closeout.'],
+  ['Practical Engineering Knowledge', 'Solutions grounded in real production environments, not theory alone.'],
+  ['Manufacturing & Commissioning Expertise', 'Field-tested support for systems that need to operate safely and reliably.'],
+  ['U.S., Mexico & Brazil Presence', 'Based in the United States with offices and operational presence in Mexico and Brazil.'],
+].map(([title, text]) => ({ title, text }));
+
+const detailedServices = [
+  {
+    title: 'Industrial Design & Engineering',
+    image: images.engineering,
+    text: 'Manufacturing-focused design, process layouts, equipment planning, and practical engineering guidance.',
+    tags: ['Process Solutions', 'Plant Layouts', 'System Planning'],
+  },
+  {
+    title: 'Electromechanical Assembly',
+    image: images.assembly,
+    text: 'Mechanical and electrical assembly support for production systems, machinery, and industrial equipment.',
+    tags: ['Assembly', 'Controls Support', 'Manufacturing Systems'],
+  },
+  {
+    title: 'Rigging & Relocations',
+    image: images.rigging,
+    text: 'Industrial equipment movement, plant relocation, installation support, and coordinated field execution.',
+    tags: ['Rigging', 'Installation', 'Relocation'],
+  },
+  {
+    title: 'Industrial Maintenance',
+    image: images.maintenance,
+    text: 'Maintenance programs and field support designed to improve uptime and long-term system reliability.',
+    tags: ['Uptime', 'Reliability', 'Field Support'],
+  },
+  {
+    title: 'Automation & Integration',
+    image: images.automation,
+    text: 'Automation and equipment integration support for safer, more repeatable manufacturing operations.',
+    tags: ['Automation', 'Integration', 'Commissioning'],
+  },
+  {
+    title: 'Metal Fabrication & Guarding',
+    image: images.fabrication,
+    text: 'Industrial fabrication, machine guarding, and plant modifications built around real operating needs.',
+    tags: ['Fabrication', 'Machine Guarding', 'Plant Support'],
+  },
+];
+
+const equipmentCards = [
+  ['End-of-Line Packaging', 'Packaging systems for final-stage handling, wrapping, palletizing, and shipment preparation.', images.equipment],
+  ['Complete Packaging Lines', 'Integrated line support from production output to packed, shipment-ready product.', images.plant],
+  ['Bulk Material Handling', 'Conveying, storage, and movement solutions for demanding plant environments.', images.automation],
+  ['Industrial Automation', 'Automation support that improves throughput, repeatability, and operator confidence.', images.engineering],
+  ['Dust Collection Systems', 'Collection systems designed to support cleaner, safer production spaces.', images.maintenance],
+  ['Fume Filtering Systems', 'Industrial filtering solutions for processes where air quality and safety matter.', images.fabrication],
+  ['Water Treatment Plants', 'Plant systems and support for industrial process water treatment requirements.', images.plant],
+  ['Air Filtering Products & Parts', 'Replacement products, parts, and equipment for reliable filtration performance.', images.equipment],
+  ['Pumps & Mixing', 'Pump and mixing solutions for industrial fluids, materials, and process needs.', images.assembly],
+  ['Ceramic Tile Equipment', 'Equipment support informed by ceramics manufacturing and plant experience.', images.rigging],
+  ['Cutting Equipment', 'Cutting systems and equipment for production, fabrication, and plant operations.', images.fabrication],
+  ['Combustion Engineering', 'Combustion system support for reliability, control, and industrial performance.', images.engineering],
+].map(([title, text, image]) => ({ title, text, image }));
+
+const projects = [
+  {
+    region: 'United States',
+    title: 'Manufacturing System Integration',
+    text: 'Production system support for equipment integration, layout coordination, and commissioning readiness.',
+    image: images.plant,
+    tags: ['Manufacturing Systems', 'Equipment Integration', 'Commissioning'],
+  },
+  {
+    region: 'Mexico',
+    title: 'Plant Assembly & Field Support',
+    text: 'Industrial assembly and project support for manufacturing operations requiring coordinated execution.',
+    image: images.assembly,
+    tags: ['Turnkey Plant Support', 'Assembly', 'Field Support'],
+  },
+  {
+    region: 'Brazil',
+    title: 'Process Solutions Support',
+    text: 'Manufacturing process guidance and equipment planning for international production environments.',
+    image: images.engineering,
+    tags: ['Process Engineering', 'Manufacturing Systems'],
+  },
+  {
+    region: 'Spain',
+    title: 'Industrial Facility Development',
+    text: 'Project experience supporting full-scale industrial systems from design direction through operational readiness.',
+    image: images.equipment,
+    tags: ['Turnkey Plant Support', 'Commissioning'],
+  },
+  {
+    region: 'Italy',
+    title: 'Ceramics Manufacturing Systems',
+    text: 'Manufacturing and equipment experience connected to ceramics production and industrial facility operations.',
+    image: images.automation,
+    tags: ['Manufacturing Systems', 'Equipment Integration'],
+  },
+  {
+    region: 'Additional International Projects',
+    title: 'International Plant Support',
+    text: 'Project support across multiple regions for manufacturers seeking experienced industrial execution.',
+    image: images.rigging,
+    tags: ['International Experience', 'Project Support'],
+  },
+];
+
+const regions = ['All', 'United States', 'Mexico', 'Brazil', 'Spain', 'Italy', 'Additional International Projects'];
+
+const locations = [
+  {
+    title: 'United States',
+    // Replace placeholder contact details when final office information is available.
+    address: 'Address to be updated',
+    phone: 'Phone to be updated',
+    email: 'Email to be updated',
+    mapPosition: { left: '32%', top: '40%' },
+    type: 'headquarters',
+  },
+  {
+    title: 'Mexico',
+    address: 'Address to be updated',
+    phone: 'Phone to be updated',
+    email: 'Email to be updated',
+    mapPosition: { left: '28%', top: '50%' },
+    type: 'office',
+  },
+  {
+    title: 'Brazil',
+    address: 'Address to be updated',
+    phone: 'Phone to be updated',
+    email: 'Email to be updated',
+    mapPosition: { left: '38%', top: '62%' },
+    type: 'office',
+  },
+];
+
+const serviceAreas = [
+  'United States',
+  'Mexico',
+  'Brazil',
+  'Spain',
+  'Italy',
+  'Latin America',
+  'International manufacturing operations',
+];
+
+function Logo() {
+  return (
+    <div className="logo" aria-label="JRID Industrial Services">
+      <strong>JRID</strong>
+      <span>Industrial Design & Engineering</span>
+    </div>
+  );
+}
+
+function Header({ activePage, setActivePage }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navigate = (page) => {
+    setActivePage(page);
+    setMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <header className="site-header">
+      <button className="brand-button" onClick={() => navigate('Home')} aria-label="Go to JRID home">
+        <Logo />
+      </button>
+
+      <nav className={`site-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Primary navigation">
+        {navItems.map((item) => (
+          <button
+            key={item}
+            className={`${activePage === item ? 'is-active' : ''} ${item === 'Contact' ? 'nav-contact-button' : ''}`.trim()}
+            onClick={() => navigate(item)}
+          >
+            {item}
+          </button>
+        ))}
+      </nav>
+
+      <button
+        className="menu-toggle"
+        onClick={() => setMenuOpen((open) => !open)}
+        aria-label="Toggle navigation"
+        aria-expanded={menuOpen}
+      >
+        <span />
+        <span />
+      </button>
+    </header>
+  );
+}
+
+function Button({ children, page, setActivePage, variant = 'primary' }) {
+  return (
+    <button className={`button button--${variant}`} onClick={() => setActivePage(page)}>
+      {children}
+    </button>
+  );
+}
+
+function HeroSection({ eyebrow, title, text, image, actions }) {
+  return (
+    <section className="hero-section" style={{ '--hero-image': `url("${image}")` }}>
+      <div className="hero-section__content">
+        {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+        <h1>{title}</h1>
+        <p>{text}</p>
+        {actions && <div className="button-row">{actions}</div>}
+      </div>
+    </section>
+  );
+}
+
+function SectionHeader({ eyebrow, title, text, align = 'left' }) {
+  return (
+    <div className={`section-header section-header--${align}`}>
+      {eyebrow && <p className="eyebrow eyebrow--dark">{eyebrow}</p>}
+      <h2>{title}</h2>
+      {text && <p>{text}</p>}
+    </div>
+  );
+}
+
+function CTASection({ setActivePage, title, text, primaryPage = 'Contact', secondaryPage = 'Services', variant = 'dark' }) {
+  return (
+    <section className={`section cta-section ${variant === 'light' ? 'cta-section--light' : ''}`}>
+      <div className="section-inner cta-panel">
+        <div>
+          <p className="eyebrow">Start a Project</p>
+          <h2>{title}</h2>
+          <p>{text}</p>
+        </div>
+        <div className="button-row">
+          <Button page={primaryPage} setActivePage={setActivePage}>Contact JRID</Button>
+          <Button page={secondaryPage} setActivePage={setActivePage} variant="secondary">
+            Explore Services
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TextCard({ title, text }) {
+  return (
+    <article className="text-card">
+      <h3>{title}</h3>
+      <p>{text}</p>
+    </article>
+  );
+}
+
+function ImageCard({ title, text, image, tags = [] }) {
+  return (
+    <article className="image-card">
+      <img src={image} alt="" loading="lazy" />
+      <div className="image-card__body">
+        <h3>{title}</h3>
+        <p>{text}</p>
+        {tags.length > 0 && (
+          <div className="tag-list">
+            {tags.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function ProjectCard({ title, region, text, image, tags = [] }) {
+  return (
+    <article className="image-card project-card">
+      <img src={image} alt="" loading="lazy" />
+      <div className="image-card__body">
+        <p className="card-meta">{region}</p>
+        <h3>{title}</h3>
+        <p>{text}</p>
+        <div className="tag-list">
+          {tags.map((tag) => (
+            <span key={tag}>{tag}</span>
+          ))}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function HomePage({ setActivePage }) {
+  return (
+    <main>
+      <HeroSection
+        eyebrow="Industrial Design / Engineering / Manufacturing Systems"
+        title="JRID"
+        text="Industrial design, engineering, manufacturing systems, and turnkey project support for operations that need dependable execution from planning through commissioning."
+        image={images.homeHero}
+        actions={
+          <>
+            <Button page="Contact" setActivePage={setActivePage}>Contact JRID</Button>
+            <Button page="Services" setActivePage={setActivePage} variant="secondary">Explore Services</Button>
+          </>
+        }
+      />
+
+      <section className="section">
+        <div className="section-inner">
+          <SectionHeader
+            eyebrow="Core Services"
+            title="Industrial capabilities built for real production environments."
+            text="JRID supports manufacturers with disciplined design, systems, integration, and project execution."
+          />
+          <div className="card-grid card-grid--four">
+            {coreCapabilities.map((item) => <TextCard key={item.title} {...item} />)}
+          </div>
+          <div className="section-action">
+            <Button page="Services" setActivePage={setActivePage}>View Services</Button>
+          </div>
+        </div>
+      </section>
+
+      <section className="section split-section">
+        <div className="section-inner split-layout">
+          <div>
+            <p className="eyebrow eyebrow--dark">Who We Are</p>
+            <h2>Industrial project support with international manufacturing experience.</h2>
+          </div>
+          <div className="rich-text">
+            <p>
+              JRID provides industrial design, engineering, manufacturing systems, and turnkey
+              project support for clients across the United States and internationally. The company
+              helps manufacturers plan, integrate, assemble, and commission dependable industrial
+              systems built for long-term performance.
+            </p>
+            <Button page="About" setActivePage={setActivePage}>About JRID</Button>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--charcoal">
+        <div className="section-inner">
+          <SectionHeader
+            eyebrow="Why Choose JRID"
+            title="Credibility grounded in field-tested industrial execution."
+            text="JRID brings practical engineering knowledge, global project exposure, and disciplined support across manufacturing environments."
+          />
+          <div className="card-grid card-grid--three">
+            {whyChoose.map((item) => <TextCard key={item.title} {...item} />)}
+          </div>
+        </div>
+      </section>
+
+      <section className="section reliability-section">
+        <div className="section-inner reliability-panel">
+          <div>
+            <p className="eyebrow">Safety & Reliability</p>
+            <h2>Serious industrial work requires safe execution and dependable systems.</h2>
+          </div>
+          <p>
+            JRID approaches projects with careful planning, field-tested processes, and practical
+            attention to long-term performance. From equipment movement to system commissioning,
+            the priority is safe, reliable execution that supports production goals.
+          </p>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-inner split-layout">
+          <div>
+            <p className="eyebrow eyebrow--dark">Our Mission</p>
+            <h2>Helping manufacturers build smarter, safer, and more efficient operations.</h2>
+          </div>
+          <div className="rich-text">
+            <p>
+              JRID exists to help industrial teams improve manufacturing performance through
+              practical design, dependable equipment integration, and turnkey project support that
+              moves from concept to completion with clarity.
+            </p>
+            <Button page="About" setActivePage={setActivePage}>Learn More</Button>
+          </div>
+        </div>
+      </section>
+
+      <CTASection
+        setActivePage={setActivePage}
+        title="Ready to discuss an industrial project?"
+        text="Talk with JRID about services, equipment, manufacturing systems, or turnkey project support."
+      />
+    </main>
+  );
+}
+
+function AboutPage({ setActivePage }) {
+  return (
+    <main>
+      <HeroSection
+        eyebrow="About"
+        title="About JRID"
+        text="Industrial design, engineering, and turnkey project support for manufacturing operations in the United States and internationally."
+        image={images.aboutHero}
+      />
+      <section className="section">
+        <div className="section-inner split-layout">
+          <SectionHeader eyebrow="Company Overview" title="Built around dependable industrial execution." />
+          <div className="rich-text">
+            <p>
+              JRID provides industrial design, engineering, and turnkey project support for
+              manufacturing operations in the United States and internationally. Founded in 2026,
+              JRID is based in the United States with offices and operational presence in Mexico and
+              Brazil.
+            </p>
+            <p>
+              The company supports manufacturers that need dependable industrial systems, efficient
+              manufacturing processes, and experienced guidance from planning through commissioning.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--pale">
+        <div className="section-inner">
+          <SectionHeader
+            eyebrow="Industrial Background"
+            title="Practical industrial experience across regions."
+            text="JRID brings hands-on manufacturing design, assembly, and commissioning support for U.S. and international operations."
+          />
+          <div className="stat-grid">
+            <TextCard title="Established in 2026" text="Supporting manufacturers with practical project expertise." />
+            <TextCard title="U.S., Mexico & Brazil" text="Based in the United States with offices and operational presence in Mexico and Brazil." />
+            <TextCard title="30+ Years of Experience" text="Driven by founder Jose Robledo's background in manufacturing systems." />
+            <TextCard title="International Exposure" text="Projects in Spain, Italy, the United States, Mexico, and Brazil." />
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--muted">
+        <div className="section-inner split-layout">
+          <div>
+            <p className="eyebrow eyebrow--dark">What JRID Does</p>
+            <h2>Planning, engineering, assembly, integration, and commissioning support.</h2>
+          </div>
+          <div className="rich-text">
+            <p>
+              JRID helps industrial clients evaluate project needs, develop practical approaches,
+              coordinate equipment and systems, and support the field execution required to bring
+              manufacturing operations online.
+            </p>
+            <p>
+              Jose Robledo's experience includes designing, assembling, and commissioning
+              manufacturing systems and full-scale facilities across multiple countries. That
+              background informs JRID's direct, practical approach to industrial work.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--pale">
+        <div className="section-inner split-layout">
+          <div>
+            <SectionHeader
+              eyebrow="Mission & Values"
+              title="Practical solutions and reliable execution."
+            />
+          </div>
+          <div className="rich-text">
+            <p>
+              JRID helps manufacturers build safer, more efficient operations with clear planning,
+              dependable systems, and experienced project support.
+            </p>
+            <p>
+              The focus is on execution, reliability, and long-term performance—not just industrial
+              engineering in theory.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <CTASection
+        setActivePage={setActivePage}
+        title="Work with an industrial partner built for execution."
+        text="Reach out to discuss your manufacturing systems, equipment, services, or project needs."
+        secondaryPage="Services"
+      />
+    </main>
+  );
+}
+
+function ServicesPage({ setActivePage }) {
+  return (
+    <main>
+      <HeroSection
+        eyebrow="Services"
+        title="Services"
+        text="Industrial design, engineering, manufacturing systems, and turnkey project capabilities for demanding operations."
+        image={images.servicesHero}
+      />
+
+      <section className="section">
+        <div className="section-inner">
+          <SectionHeader
+            eyebrow="Core Capabilities"
+            title="A clear summary of JRID's industrial support."
+            text="JRID works across the planning, systems, assembly, integration, and commissioning stages of industrial projects."
+          />
+          <div className="card-grid card-grid--four">
+            {coreCapabilities.map((item) => <TextCard key={item.title} {...item} />)}
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--muted">
+        <div className="section-inner">
+          <SectionHeader
+            eyebrow="Detailed Services"
+            title="Field-ready support for manufacturing operations."
+          />
+          <div className="image-card-grid">
+            {detailedServices.map((service) => <ImageCard key={service.title} {...service} />)}
+          </div>
+        </div>
+      </section>
+
+      <section className="section process-section">
+        <div className="section-inner">
+          <SectionHeader
+            eyebrow="Approach"
+            title="A disciplined path from discovery to project completion."
+          />
+          <ol className="process-list">
+            <li><span>01</span><strong>Consultation / Discovery</strong><p>Understand project goals, constraints, production needs, and operating conditions.</p></li>
+            <li><span>02</span><strong>Design and Planning</strong><p>Develop practical layouts, scopes, schedules, equipment plans, and execution strategy.</p></li>
+            <li><span>03</span><strong>Engineering and Assembly Support</strong><p>Coordinate technical support, fabrication, integration, assembly, and field execution.</p></li>
+            <li><span>04</span><strong>Commissioning and Completion</strong><p>Support installation readiness, startup, performance checks, and project closeout.</p></li>
+          </ol>
+        </div>
+      </section>
+
+      <CTASection
+        setActivePage={setActivePage}
+        title="Need support for an industrial system or project?"
+        text="Contact JRID to discuss requirements, timelines, and practical next steps."
+      />
+    </main>
+  );
+}
+
+function EquipmentPage({ setActivePage }) {
+  return (
+    <main>
+      <HeroSection
+        eyebrow="Equipment"
+        title="Equipment"
+        text="Industrial equipment, systems, and integration support for manufacturing environments."
+        image={images.equipmentHero}
+      />
+
+      <section className="section">
+        <div className="section-inner split-layout">
+          <SectionHeader
+            eyebrow="Equipment Overview"
+            title="Systems and categories used in active manufacturing environments."
+          />
+          <div className="rich-text">
+            <p>
+              JRID works with industrial equipment and systems that support production, packaging,
+              material handling, air quality, process performance, and plant reliability.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--muted">
+        <div className="section-inner">
+          <div className="image-card-grid">
+            {equipmentCards.map((item) => <ImageCard key={item.title} {...item} />)}
+          </div>
+        </div>
+      </section>
+
+      <CTASection
+        setActivePage={setActivePage}
+        title="Looking for equipment or integration support?"
+        text="Contact JRID to discuss equipment needs, project scope, and service support."
+        secondaryPage="Services"
+      />
+    </main>
+  );
+}
+
+function ProjectGalleryPage({ setActivePage }) {
+  const [activeRegion, setActiveRegion] = useState('All');
+  const groupedProjects = useMemo(
+    () => regions
+      .filter((region) => region !== 'All')
+      .map((region) => ({
+        region,
+        projects: projects.filter((project) => project.region === region),
+      }))
+      .filter((group) => activeRegion === 'All' || group.region === activeRegion),
+    [activeRegion],
+  );
+
+  return (
+    <main>
+      <HeroSection
+        eyebrow="Project Experience"
+        title="Project Gallery"
+        text="Examples of industrial project experience across regions, manufacturing environments, and system types."
+        image={images.galleryHero}
+      />
+
+      <section className="section">
+        <div className="section-inner">
+          <SectionHeader
+            eyebrow="Gallery"
+            title="Industrial support across countries and regions."
+            text="JRID has supported manufacturing and industrial projects across the United States, Mexico, Brazil, Spain, Italy, and additional international operations."
+          />
+          <div className="filter-bar" aria-label="Filter projects by region">
+            {regions.map((region) => (
+              <button
+                key={region}
+                className={activeRegion === region ? 'is-active' : ''}
+                onClick={() => setActiveRegion(region)}
+              >
+                {region}
+              </button>
+            ))}
+          </div>
+          <div className="project-groups">
+            {groupedProjects.map((group) => (
+              <section className="project-group" key={group.region} aria-label={`${group.region} projects`}>
+                <h3>{group.region}</h3>
+                <div className="project-grid">
+                  {group.projects.map((project) => (
+                    <ProjectCard key={`${project.region}-${project.title}`} {...project} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CTASection
+        setActivePage={setActivePage}
+        title="Have a project that needs experienced industrial support?"
+        text="Talk with JRID about your manufacturing environment, equipment needs, and execution goals."
+      />
+    </main>
+  );
+}
+
+function WorldMap({ locations, hoveredLocation, onLocationHover }) {
+  return (
+    <div className="world-map" aria-label="Operational presence world map">
+      <svg viewBox="0 0 1000 520" className="world-map__graphic" aria-hidden="true">
+        <path d="M130 170c35-45 82-50 129-40 32 7 65 22 84 48 16 19 26 48 24 74-2 34-18 62-45 81-27 18-60 18-90 16-34-3-69-13-97-33-23-16-40-40-49-67-5-16-8-33-2-50z" fill="rgba(17,17,17,0.12)" />
+        <path d="M340 138c38-10 70-8 108 7 24 10 43 28 56 50 14 26 19 58 13 87-5 21-17 39-36 53-18 13-40 18-62 20-26 2-52-1-76-12-24-10-44-26-56-47-15-28-16-61-5-91 9-23 24-42 54-57z" fill="rgba(17,17,17,0.12)" />
+        <path d="M520 128c42 5 79 24 106 53 22 25 31 61 25 93-7 38-31 69-64 85-22 11-48 13-72 9-24-3-46-12-64-27-21-18-35-42-40-68-6-27 0-56 16-79 16-25 41-44 78-56z" fill="rgba(17,17,17,0.12)" />
+        <path d="M690 210c28 10 52 30 66 57 8 15 10 33 6 50-4 19-16 34-33 44-17 10-37 13-56 11-18-2-35-9-50-20-20-16-34-38-37-62-4-27 4-55 21-76 15-18 38-29 64-34z" fill="rgba(17,17,17,0.12)" />
+        <path d="M780 300c18-12 40-16 60-10 10 4 21 10 28 19 8 10 11 23 9 35-2 13-9 25-19 35-11 10-24 16-38 18-13 2-26-1-37-8-12-7-20-18-24-31-4-16-2-33 8-46 6-8 14-14 22-18z" fill="rgba(17,17,17,0.12)" />
+        <path d="M555 390c18-8 40-7 58 4 10 6 18 15 23 26 6 14 6 30 1 44-5 13-16 24-30 30-14 6-30 7-44 2-16-6-29-19-36-34-8-17-8-36 0-54 5-11 14-20 28-24z" fill="rgba(17,17,17,0.12)" />
+        <path d="M850 382c20-4 38 2 56 12 10 6 18 14 23 24 5 10 6 21 3 32-4 14-14 26-27 33-14 9-30 10-44 4-14-6-25-18-31-32-6-15-6-32 1-47 4-10 11-19 19-24z" fill="rgba(17,17,17,0.12)" />
+      </svg>
+      {locations.map((location) => (
+        <button
+          key={location.title}
+          type="button"
+          className={`world-map__dot ${hoveredLocation === location.title ? 'is-hovered' : ''}`}
+          style={location.mapPosition}
+          onMouseEnter={() => onLocationHover(location.title)}
+          onMouseLeave={() => onLocationHover(null)}
+          onFocus={() => onLocationHover(location.title)}
+          onBlur={() => onLocationHover(null)}
+          aria-label={`${location.type === 'headquarters' ? 'Headquarters' : 'Office'} in ${location.title}`}
+        >
+          <span className="world-map__label">{location.type === 'headquarters' ? 'Headquarters' : 'Office'}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ContactPage() {
+  const [form, setForm] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    region: '',
+    projectType: '',
+    message: '',
+  });
+  const [hoveredLocation, setHoveredLocation] = useState(null);
+
+  const updateField = (event) => {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  };
+
+  const submit = (event) => {
+    event.preventDefault();
+    alert('Thank you. This form is ready for future backend integration.');
+  };
+
+  return (
+    <main>
+      <HeroSection
+        eyebrow="Contact"
+        title="Contact JRID"
+        text="Reach out about industrial systems, services, equipment, or turnkey project support."
+        image={images.contactHero}
+      />
+
+      <section className="section">
+        <div className="section-inner contact-layout">
+          <div>
+            <SectionHeader
+              eyebrow="Project Inquiry"
+              title="Tell JRID what you are planning."
+              text="Share the basics and the JRID team can review your service, equipment, or project support needs."
+            />
+          </div>
+          <form className="contact-form" onSubmit={submit}>
+            <label>Name<input name="name" value={form.name} onChange={updateField} required /></label>
+            <label>Company<input name="company" value={form.company} onChange={updateField} /></label>
+            <label>Email<input name="email" type="email" value={form.email} onChange={updateField} required /></label>
+            <label>Phone<input name="phone" type="tel" value={form.phone} onChange={updateField} /></label>
+            <label>Country / Region<input name="region" value={form.region} onChange={updateField} /></label>
+            <label>
+              Project Type
+              <select name="projectType" value={form.projectType} onChange={updateField}>
+                <option value="">Select a project type</option>
+                <option>Industrial Design & Engineering</option>
+                <option>Manufacturing Systems</option>
+                <option>Equipment Integration</option>
+                <option>Turnkey Project Support</option>
+                <option>Maintenance / Field Support</option>
+              </select>
+            </label>
+            <label className="form-full">Message<textarea name="message" value={form.message} onChange={updateField} rows="6" required /></label>
+            <button className="button button--primary form-full" type="submit">Submit Inquiry</button>
+          </form>
+        </div>
+      </section>
+
+      <section className="section section--muted">
+        <div className="section-inner location-section">
+          <div>
+            <SectionHeader eyebrow="Locations" title="Office and operational presence." />
+            <div className="card-grid card-grid--three">
+              {locations.map((location) => (
+                <article className="location-card" key={location.title}>
+                  <h3>{location.title}</h3>
+                  <p>{location.address}</p>
+                  <p>{location.phone}</p>
+                  <p>{location.email}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+          <div className="world-map-panel">
+            <WorldMap
+              locations={locations}
+              hoveredLocation={hoveredLocation}
+              onLocationHover={setHoveredLocation}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-inner split-layout">
+          <SectionHeader
+            eyebrow="Areas We Service"
+            title="Supporting manufacturers across the United States and internationally."
+          />
+          <ul className="area-list">
+            {serviceAreas.map((area) => <li key={area}>{area}</li>)}
+          </ul>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function Footer({ setActivePage }) {
+  return (
+    <footer className="site-footer">
+      <div className="footer-inner">
+        <Logo />
+        <nav className="footer-links" aria-label="Footer navigation">
+          {navItems.map((item) => (
+            <button key={item} onClick={() => setActivePage(item)}>{item}</button>
+          ))}
+        </nav>
+        <p>Industrial design, engineering, manufacturing systems, and turnkey project support.</p>
+      </div>
+    </footer>
+  );
+}
+
+function App() {
+  const [activePage, setActivePage] = useState('Home');
+
+  useEffect(() => {
+    document.title = activePage === 'Home' ? 'JRID Industrial Services' : `${activePage} | JRID`;
+  }, [activePage]);
+
+  return (
+    <>
+      <Header activePage={activePage} setActivePage={setActivePage} />
+      {activePage === 'Home' && <HomePage setActivePage={setActivePage} />}
+      {activePage === 'About' && <AboutPage setActivePage={setActivePage} />}
+      {activePage === 'Services' && <ServicesPage setActivePage={setActivePage} />}
+      {activePage === 'Equipment' && <EquipmentPage setActivePage={setActivePage} />}
+      {activePage === 'Project Gallery' && <ProjectGalleryPage setActivePage={setActivePage} />}
+      {activePage === 'Contact' && <ContactPage />}
+      <Footer setActivePage={setActivePage} />
+    </>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
