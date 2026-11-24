@@ -46,7 +46,7 @@ const coreCapabilities = [
 ];
 
 const whyChoose = [
-  ['30+ Years of Industrial Experience', 'Hands-on credibility through founder Jose Robledo and international manufacturing work.'],
+  ['30+ Years of Industrial Experience', 'Hands-on credibility through international manufacturing work.'],
   ['International Project Experience', 'Project exposure across Spain, Italy, the United States, Mexico, Brazil, and broader markets.'],
   ['Turnkey Project Support', 'Disciplined coordination across design, assembly, integration, commissioning, and closeout.'],
   ['Practical Engineering Knowledge', 'Solutions grounded in real production environments, not theory alone.'],
@@ -126,6 +126,7 @@ const projects = [
 ];
 
 const regions = ['All', 'United States', 'Mexico', 'Brazil', 'Spain', 'Italy', 'Additional International Projects'];
+const contactFormRecipient = 'jrobledo@jridesign.com';
 
 const locations = [
   {
@@ -433,10 +434,6 @@ function HomePage({ setActivePage }) {
               taking ownership of our actions and maintaining discipline in execution, we create
               safer, more reliable operations across every project.
             </p>
-            <p className="safety-signature">
-              <strong>Jose M. Robledo</strong>
-              <span>President &amp; CEO</span>
-            </p>
           </div>
         </div>
       </section>
@@ -485,7 +482,7 @@ function AboutPage({ setActivePage }) {
               Founded in 2022, JRID operates with headquarters and offices in the United States, Mexico, and Brazil, supporting companies that need dependable industrial systems, efficient manufacturing processes, and experienced guidance. The company works across industries and regions, helping manufacturers transform complex operational needs into practical, well-built solutions.
             </p>
             <p>
-              JRID is grounded in more than thirty years of hands-on industrial experience. Founder Jose Robledo has designed, assembled, and commissioned manufacturing systems and full-scale facilities across the United States, Mexico, Brazil, Spain, and Italy. His background spans plant development, process engineering, equipment integration, and real-world manufacturing execution.
+              JRID is grounded in more than thirty years of hands-on industrial experience across manufacturing systems and full-scale facilities in the United States, Mexico, Brazil, Spain, and Italy. This background spans plant development, process engineering, equipment integration, and real-world manufacturing execution.
             </p>
             <p>
               This foundation gives JRID a clear advantage: the company understands not only how industrial systems are designed, but how they are built, operated, and improved in the field.
@@ -502,12 +499,12 @@ function AboutPage({ setActivePage }) {
           <SectionHeader
             eyebrow="Industrial Background"
             title="Experience across facilities, systems, and regions."
-            text="JRID is grounded in more than thirty years of hands-on industrial experience through founder Jose Robledo."
+            text="JRID is grounded in more than thirty years of hands-on industrial experience across facilities, systems, and regions."
           />
           <div className="stat-grid">
             <TextCard title="Established in 2022" text="Created to support manufacturers with practical industrial project expertise." />
             <TextCard title="U.S., Mexico & Brazil" text="Based in the United States with offices and operational presence in Mexico and Brazil." />
-            <TextCard title="30+ Years of Experience" text="Backed by founder Jose Robledo's design, assembly, and commissioning background." />
+            <TextCard title="30+ Years of Experience" text="Backed by design, assembly, and commissioning experience in active manufacturing environments." />
             <TextCard title="International Exposure" text="Project experience includes Spain, Italy, the United States, Mexico, and Brazil." />
           </div>
         </div>
@@ -707,7 +704,21 @@ function ContactPage() {
 
   const submit = (event) => {
     event.preventDefault();
-    alert('Thank you. This form is ready for future backend integration.');
+
+    const subject = `JRID inquiry from ${form.name || 'website contact form'}`;
+    const body = [
+      `Name: ${form.name}`,
+      `Company: ${form.company || 'Not provided'}`,
+      `Email: ${form.email}`,
+      `Phone: ${form.phone || 'Not provided'}`,
+      `Country / Region: ${form.region || 'Not provided'}`,
+      `Project Type: ${form.projectType || 'Not provided'}`,
+      '',
+      'Message:',
+      form.message,
+    ].join('\n');
+
+    window.location.href = `mailto:${contactFormRecipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
